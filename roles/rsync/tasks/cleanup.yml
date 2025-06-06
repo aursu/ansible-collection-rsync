@@ -1,0 +1,24 @@
+---
+# Cleanup tasks
+- name: Clean up SSH keys
+  block:
+    - name: Remove private key
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - "{{ ssh_key_path }}"
+        - "{{ ssh_key_path }}.pub"
+      when: cleanup_ssh_key | bool
+      tags: [always]
+
+    - name: Remove public key from target's authorized_keys
+      ansible.posix.authorized_key:
+        user: "{{ ssh_user }}"
+        key: "{{ public_key_content.content | b64decode }}"
+        state: absent
+      delegate_to: "{{ target_host }}"
+      run_once: true
+      become: yes
+      when: cleanup_ssh_key | bool
+      tags: [always] 

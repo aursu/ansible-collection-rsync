@@ -1,0 +1,20 @@
+---
+# Execute rsync
+- name: Run rsync using generated key
+  ansible.builtin.command:
+    cmd: >-
+      rsync -avz 
+      -e "ssh -i {{ ssh_key_path }} 
+      {% if not ssh_strict_host_checking %}
+      -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+      {% endif %}"
+      {{ source_dir }}/ {{ ssh_user }}@{{ target_host }}:{{ target_dir }}
+  environment:
+    SSH_AUTH_SOCK: ""
+  register: rsync_result
+  no_log: true
+
+- name: Show rsync output
+  debug:
+    var: rsync_result.stdout_lines
+  when: rsync_result.stdout_lines | length > 0 

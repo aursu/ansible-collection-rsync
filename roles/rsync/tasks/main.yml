@@ -1,0 +1,9 @@
+---
+- name: Include SSH key setup tasks
+  ansible.builtin.import_tasks: ssh_keys.yml
+
+- name: Include rsync tasks
+  ansible.builtin.import_tasks: rsync.yml
+
+- name: Include cleanup tasks
+  ansible.builtin.import_tasks: cleanup.yml

@@ -1,0 +1,47 @@
+---
+# Setup SSH directories and keys
+- name: Ensure source .ssh directory exists
+  ansible.builtin.file:
+    path: "{{ ssh_dir }}"
+    state: directory
+    mode: "{{ ssh_dir_mode }}"
+  tags: [always]
+
+- name: Generate SSH key pair
+  ansible.builtin.openssh_keypair:
+    path: "{{ ssh_key_path }}"
+    type: "{{ ssh_key_type }}"
+    mode: "{{ ssh_key_mode }}"
+    comment: "ansible-rsync key for {{ target_host }}"
+  register: ssh_key
+  tags: [always]
+
+- name: Read public key content
+  ansible.builtin.slurp:
+    src: "{{ ssh_key_path }}.pub"
+  register: public_key_content
+  run_once: true
+  become: yes
+  tags: [always]
+
+- name: Ensure target .ssh directory exists
+  ansible.builtin.file:
+    path: "{{ ssh_dir }}"
+    state: directory
+    mode: "{{ ssh_dir_mode }}"
+  delegate_to: "{{ target_host }}"
+  run_once: true
+  become: yes
+  tags: [always]
+
+- name: Add public key to target's authorized_keys
+  ansible.posix.authorized_key:
+    user: "{{ ssh_user }}"
+    key: "{{ public_key_content.content | b64decode }}"
+    key_options: 'command="rsync --server --sender -lHogDtpre.iLsfxC --numeric-ids . {{ target_dir }}" {{ source_dir }}/"'
+    state: present
+    manage_dir: yes
+  delegate_to: "{{ target_host }}"
+  run_once: true
+  become: yes
+  tags: [always] 

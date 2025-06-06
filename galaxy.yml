@@ -1,0 +1,16 @@
+namespace: "aursu"
+name: "rsync"
+version: "1.0.0"
+readme: "README.md"
+authors:
+  - "Alexander Ursu <alexander.ursu@gmail.com>"
+description: "Ansible collection for rsync operations with SSH key management"
+license: "MIT"
+tags:
+  - rsync
+  - backup
+  - ssh
+repository: "https://github.com/aursu/ansible-collection-rsync.git"
+documentation: "https://github.com/aursu/ansible-collection-rsync/wiki"
+homepage: "https://github.com/aursu/ansible-collection-rsync"
+issues: "https://github.com/aursu/ansible-collection-rsync/issues" 

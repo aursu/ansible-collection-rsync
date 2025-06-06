@@ -1,0 +1,11 @@
+---
+- name: Setup rsync between hosts
+  hosts: all
+  become: true
+
+  roles:
+    - role: aursu.rsync.rsync
+      vars:
+        target_host: "{{ target_host }}"
+        source_dir: "{{ source_dir }}"
+        target_dir: "{{ target_dir }}"

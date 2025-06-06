@@ -1,0 +1,15 @@
+---
+# SSH key configuration
+ssh_key_type: ed25519
+ssh_key_mode: '0600'
+ssh_dir_mode: '0700'
+cleanup_ssh_key: true
+
+# Default paths
+ssh_dir: /root/.ssh
+key_name: "{{ target_host | generate_key_name }}"
+ssh_key_path: "{{ ssh_dir }}/{{ key_name }}"
+
+# SSH options
+ssh_strict_host_checking: false
+ssh_user: root 
