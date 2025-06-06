@@ -3,7 +3,7 @@
 - name: Run rsync using generated key
   ansible.builtin.command:
     cmd: >-
-      rsync -avz 
+      rsync -ca --info=PROGRESS2,STATS3
       -e "ssh -i {{ ssh_key_path }} 
       {% if not ssh_strict_host_checking %}
       -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
@@ -12,9 +12,8 @@
   environment:
     SSH_AUTH_SOCK: ""
   register: rsync_result
-  no_log: true
-
-- name: Show rsync output
-  debug:
-    var: rsync_result.stdout_lines
-  when: rsync_result.stdout_lines | length > 0 
+  no_log: false  # Changed to show progress output
+  # Set async to a high value (in seconds) - here 12 hours
+  async: 43200
+  # Poll every 60 seconds
+  poll: 60
