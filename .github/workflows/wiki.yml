@@ -1,0 +1,25 @@
+name: Sync Wiki
+
+on:
+  push:
+    paths:
+      - '.github/wiki/**'
+    branches:
+      - main
+
+jobs:
+  sync-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload Wiki Content
+        uses: Andrew-Chen-Wang/github-wiki-action@v4
+        env:
+          # Make sure to create this secret in your repository settings
+          WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
+          GH_PAT: ${{ secrets.WIKI_TOKEN }}
+        with:
+          path: .github/wiki
+          commit-message: "docs: sync wiki content"
