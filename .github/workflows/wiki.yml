@@ -11,15 +11,18 @@ jobs:
   sync-wiki:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Upload Wiki Content
-        uses: Andrew-Chen-Wang/github-wiki-action@v4
+      - name: Update Wiki
         env:
-          # Make sure to create this secret in your repository settings
           WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
-          GH_PAT: ${{ secrets.WIKI_TOKEN }}
-        with:
-          path: .github/wiki
-          commit-message: "docs: sync wiki content"
+        run: |
+          git config --global user.email "alexander.ursu@gmail.com"
+          git config --global user.name "Alexander Ursu"
+          git clone "https://${WIKI_TOKEN}@github.com/aursu/ansible-collection-rsync.wiki.git" wiki
+          cp -r .github/wiki/* wiki/
+          cd wiki
+          git add .
+          git commit -m "docs: sync wiki content" || echo "No changes to commit"
+          git push
