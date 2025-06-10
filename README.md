@@ -40,3 +40,57 @@ source.example.com
 ```
 
 The playbook will run on the host where it's executed (source.example.com in this example) and sync files to the specified target_host.
+
+## Running Unit Tests
+
+To run the unit tests for this collection, the collection folder must be placed in the following directory structure:
+
+```
+ansible_collections/
+└── aursu/
+    └── rsync/
+        └── (collection files here)
+```
+
+This structure ensures that the collection is properly recognized by Python and Ansible.
+
+### Steps to Run Tests
+
+1. Place the collection folder (`rsync`) into the directory structure as shown above.
+
+2. Set the `PYTHONPATH` to include the root directory of the collection hierarchy:
+   ```bash
+   export PYTHONPATH=$PWD/../../..
+   ```
+
+   On Windows (PowerShell):
+   ```powershell
+   $env:PYTHONPATH="$PWD/../../.."
+   ```
+
+3. Run the tests using `unittest` from the `ansible_collections/aursu/rsync` folder:
+   ```bash
+   python -m unittest discover -s tests/unit/plugins/filter -p "*.py" -v
+   ```
+
+### Example
+
+If your project is located in a directory structure like this:
+```
+<project_root>/ansible_collections/aursu/rsync
+```
+
+The `PYTHONPATH` should be set to:
+```
+<project_root>
+```
+
+And the tests should be run from:
+```
+<project_root>/ansible_collections/aursu/rsync
+```
+
+Using the following command:
+```bash
+python -m unittest discover -s tests/unit/plugins/filter -p "*.py" -v
+```

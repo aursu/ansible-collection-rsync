@@ -29,7 +29,7 @@ def generate_key_name(target_host, key_type='ed25519'):
         raise AnsibleFilterError("target_host cannot be empty or contain only whitespace")
     
     # Sanitize the target host name (remove non-alphanumeric chars)
-    safe_host = re.sub(r'[^a-zA-Z0-9]', '_', target_host)
+    safe_host = re.sub(r'[^a-zA-Z0-9]+', '_', target_host).strip('_')
     
     # Generate UUID-based hash
     unique_id = str(uuid.uuid4())
@@ -45,4 +45,4 @@ class FilterModule(object):
     def filters(self):
         return {
             'generate_key_name': generate_key_name
-        } 
+        }
