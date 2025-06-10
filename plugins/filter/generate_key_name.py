@@ -1,7 +1,31 @@
-from ansible.errors import AnsibleFilterError
 import re
 import hashlib
 import uuid
+from ansible.errors import AnsibleFilterError
+
+DOCUMENTATION = '''
+---
+filter: generate_key_name
+description: >
+    Generates a unique SSH key name based on the target host and key type.
+    The key name is sanitized to remove invalid characters and includes a hash for uniqueness.
+parameters:
+  - target_host:
+      description: The target host name or IP address.
+      required: true
+      type: str
+  - key_type:
+      description: >
+          The type of SSH key to generate. Must be one of: 'rsa', 'ed25519', 'ecdsa', 'dsa'.
+      required: false
+      type: str
+      default: ed25519
+returns:
+    description: >
+        A sanitized key name in the format: id_<key_type>_<sanitized_host>_<hash>.
+    type: str
+    sample: id_ed25519_example_com_a1b2c3d
+'''
 
 def generate_key_name(target_host, key_type='ed25519'):
     """
