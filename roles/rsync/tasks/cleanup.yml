@@ -19,6 +19,6 @@
         state: absent
       delegate_to: "{{ target_host }}"
       run_once: true
-      become: yes
+      become: true
       when: cleanup_ssh_key | bool
       tags: [always] 

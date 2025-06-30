@@ -25,7 +25,7 @@ These keys are managed automatically and don't require manual configuration.
 
 1. Run the playbook with required parameters:
 ```bash
-ansible-playbook -i inventory/inventory.yml rsync_content.yml \
+ansible-playbook playbooks/rsync_content.yml \
   -e "target_host=target.example.com" \
   -e "source_dir=/path/to/sync" \
   -e "target_dir=/destination/path"

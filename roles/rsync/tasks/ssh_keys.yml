@@ -21,7 +21,7 @@
     src: "{{ ssh_key_path }}.pub"
   register: public_key_content
   run_once: true
-  become: yes
+  become: true
   tags: [always]
 
 - name: Ensure target .ssh directory exists
@@ -31,7 +31,7 @@
     mode: "{{ ssh_dir_mode }}"
   delegate_to: "{{ target_host }}"
   run_once: true
-  become: yes
+  become: true
   tags: [always]
 
 - name: Add public key to target's authorized_keys
@@ -43,5 +43,5 @@
     manage_dir: yes
   delegate_to: "{{ target_host }}"
   run_once: true
-  become: yes
+  become: true
   tags: [always] 
