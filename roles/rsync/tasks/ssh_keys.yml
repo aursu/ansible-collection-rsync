@@ -7,12 +7,15 @@
     mode: "{{ ssh_dir_mode }}"
   tags: [always]
 
+# 'force: true' is set to ensure the SSH key is always (re)generated, which may overwrite existing
+# keys; this is intentional to guarantee key consistency for automation.
 - name: Generate SSH key pair
-  ansible.builtin.openssh_keypair:
+  community.crypto.openssh_keypair:
     path: "{{ ssh_key_path }}"
     type: "{{ ssh_key_type }}"
     mode: "{{ ssh_key_mode }}"
     comment: "ansible-rsync key for {{ target_host }}"
+    force: true
   register: ssh_key
   tags: [always]
 
