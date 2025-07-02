@@ -7,7 +7,7 @@ cleanup_ssh_key: true
 
 # Default paths
 ssh_dir: /root/.ssh
-key_name: "{{ target_host | generate_key_name }}"
+key_name: "{{ target_host | aursu.rsync.generate_key_name }}"
 ssh_key_path: "{{ ssh_dir }}/{{ key_name }}"
 
 # SSH options
