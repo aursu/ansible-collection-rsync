@@ -1,33 +1,34 @@
 ---
 # Setup SSH directories and keys
-- name: Ensure source .ssh directory exists
+- name: Ensure source .ssh directory {{ ssh_dir }} exists
   ansible.builtin.file:
     path: "{{ ssh_dir }}"
     state: directory
     mode: "{{ ssh_dir_mode }}"
+  become: true
   tags: [always]
 
 # 'force: true' is set to ensure the SSH key is always (re)generated, which may overwrite existing
 # keys; this is intentional to guarantee key consistency for automation.
-- name: Generate SSH key pair
+- name: Generate SSH key pair at {{ ssh_key_path }}
   community.crypto.openssh_keypair:
     path: "{{ ssh_key_path }}"
     type: "{{ ssh_key_type }}"
     mode: "{{ ssh_key_mode }}"
     comment: "ansible-rsync key for {{ target_host }}"
     force: true
+  become: true
   register: ssh_key
   tags: [always]
 
-- name: Read public key content
+- name: Read public key content for {{ ssh_key_path }}.pub
   ansible.builtin.slurp:
     src: "{{ ssh_key_path }}.pub"
   register: public_key_content
-  run_once: true
   become: true
   tags: [always]
 
-- name: Ensure target .ssh directory exists
+- name: Ensure target .ssh directory {{ ssh_dir }} exists
   ansible.builtin.file:
     path: "{{ ssh_dir }}"
     state: directory
@@ -37,7 +38,7 @@
   become: true
   tags: [always]
 
-- name: Add public key to target's authorized_keys
+- name: Add public key to target's authorized_keys for user {{ ssh_user }}
   ansible.posix.authorized_key:
     user: "{{ ssh_user }}"
     key: "{{ public_key_content.content | b64decode }}"
@@ -45,6 +46,5 @@
     state: present
     manage_dir: yes
   delegate_to: "{{ target_host }}"
-  run_once: true
   become: true
   tags: [always] 
