@@ -9,3 +9,8 @@ cleanup_ssh_key: true
 ssh_strict_host_checking: false
 ssh_user: root 
 ssh_dir: "{{ ssh_user | aursu.rsync.ssh_dir }}"
+
+# Rsync options
+rsync_cleanup_target: false
+rsync_owner: null
+rsync_group: null

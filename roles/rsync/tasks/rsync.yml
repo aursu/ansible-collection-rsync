@@ -1,9 +1,20 @@
 ---
+- name: Remove target directory {{ target_dir }} on {{ target_host }} if requested
+  ansible.builtin.file:
+    path: "{{ target_dir }}"
+    state: absent
+  when: rsync_cleanup_target | bool
+  delegate_to: "{{ target_host }}"
+  become: true
+
 # Execute rsync
 - name: Run rsync using generated key
   ansible.builtin.command:
     cmd: >-
       rsync -ca --info=PROGRESS2,STATS3
+      {% if rsync_owner or rsync_group %}
+      --chown={{ rsync_owner | default('') }}:{{ rsync_group | default('') }}
+      {% endif %}
       -e "ssh -i {{ ssh_key_path }} 
       {% if not ssh_strict_host_checking %}
       -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
