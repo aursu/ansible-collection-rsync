@@ -1,7 +1,10 @@
 ---
-- name: Generate SSH key name and path
+- name: Generate SSH key name
   ansible.builtin.set_fact:
     key_name: "{{ target_host | aursu.rsync.generate_key_name }}"
+
+- name: Generate SSH key path
+  ansible.builtin.set_fact:
     ssh_key_path: "{{ ssh_dir }}/{{ key_name }}"
 
 - name: Include SSH key setup tasks
