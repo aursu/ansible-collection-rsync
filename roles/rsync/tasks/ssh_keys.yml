@@ -38,6 +38,7 @@
   ansible.posix.authorized_key:
     user: "{{ ssh_user }}"
     key: "{{ public_key_content.content | b64decode }}"
+    # rsync --server -logDtprce.iLsfxCIvu --info=STATS3 . /mnt/disks/data1
     key_options: "no-agent-forwarding,no-port-forwarding,no-pty,no-X11-forwarding"
     state: present
     manage_dir: yes
