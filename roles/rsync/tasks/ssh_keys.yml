@@ -7,6 +7,11 @@
     mode: "{{ ssh_dir_mode }}"
   become: true
 
+- name: Generate SSH key name and path
+  ansible.builtin.set_fact:
+    key_name: "{{ target_host | aursu.rsync.generate_key_name }}"
+    ssh_key_path: "{{ ssh_dir }}/{{ key_name }}"
+
 # 'force: true' is set to ensure the SSH key is always (re)generated, which may overwrite existing
 # keys; this is intentional to guarantee key consistency for automation.
 - name: Generate SSH key pair at {{ ssh_key_path }}
