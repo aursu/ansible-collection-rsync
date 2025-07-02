@@ -10,7 +10,6 @@
         - "{{ ssh_key_path }}"
         - "{{ ssh_key_path }}.pub"
       when: cleanup_ssh_key | bool
-      tags: [always]
 
     - name: Remove public key from target's authorized_keys
       ansible.posix.authorized_key:
@@ -21,4 +20,3 @@
       run_once: true
       become: true
       when: cleanup_ssh_key | bool
-      tags: [always] 

@@ -6,7 +6,6 @@
     state: directory
     mode: "{{ ssh_dir_mode }}"
   become: true
-  tags: [always]
 
 # 'force: true' is set to ensure the SSH key is always (re)generated, which may overwrite existing
 # keys; this is intentional to guarantee key consistency for automation.
@@ -19,14 +18,12 @@
     force: true
   become: true
   register: ssh_key
-  tags: [always]
 
 - name: Read public key content for {{ ssh_key_path }}.pub
   ansible.builtin.slurp:
     src: "{{ ssh_key_path }}.pub"
   register: public_key_content
   become: true
-  tags: [always]
 
 - name: Ensure target .ssh directory {{ ssh_dir }} exists
   ansible.builtin.file:
@@ -36,7 +33,6 @@
   delegate_to: "{{ target_host }}"
   run_once: true
   become: true
-  tags: [always]
 
 - name: Add public key to target's authorized_keys for user {{ ssh_user }}
   ansible.posix.authorized_key:
@@ -47,4 +43,3 @@
     manage_dir: yes
   delegate_to: "{{ target_host }}"
   become: true
-  tags: [always] 
