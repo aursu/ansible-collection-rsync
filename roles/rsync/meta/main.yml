@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  author: Alexander Ursu
+  description: >
+    Ansible role to set up and manage rsync operations between hosts, including SSH
+    key management for secure file transfers.
+  license: MIT
+  min_ansible_version: "2.14"
+  platforms:
+    - name: EL
+      versions: ["9", "10"]
+    - name: Ubuntu
+      versions: ["jammy", "noble"]
+  galaxy_tags:
+    - rsync
+    - ssh
+    - file-transfer
+    - storage
+    - linux
+dependencies: []
