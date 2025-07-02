@@ -38,7 +38,7 @@
   ansible.posix.authorized_key:
     user: "{{ ssh_user }}"
     key: "{{ public_key_content.content | b64decode }}"
-    key_options: 'command="rsync --server --sender -lHogDtpre.iLsfxC --numeric-ids . {{ target_dir }}" {{ source_dir }}/"'
+    key_options: 'command="rsync --server",no-agent-forwarding,no-port-forwarding,no-X11-forwarding'
     state: present
     manage_dir: yes
   delegate_to: "{{ target_host }}"
