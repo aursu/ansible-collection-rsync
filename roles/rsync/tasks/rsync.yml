@@ -3,7 +3,9 @@
   ansible.builtin.file:
     path: "{{ target_dir }}"
     state: absent
-  when: rsync_cleanup_target | bool
+    recurse: true
+    force: true
+  when: rsync_cleanup_target | default(false) | bool
   delegate_to: "{{ target_host }}"
   become: true
 
