@@ -1,0 +1,26 @@
+---
+# The lint job is BLOCKING. This file is what makes that survivable: the rules
+# below are reported and do not fail the build, everything else does.
+#
+# The rules that matter - load-failure and syntax-check - are tagged
+# `unskippable`, so ansible-lint refuses to warn-list them no matter what appears
+# below. That is what makes blocking safe rather than merely strict: widening this
+# list later cannot silence a file that will not parse.
+#
+# The intent is a ratchet: shorten the list, do not lengthen it.
+warn_list:
+  # Deliberate: the role shells out to rsync rather than using the synchronize
+  # module, because synchronize cannot express the -e "ssh -i <key>" the role
+  # needs for its generated per-target key.
+  - command-instead-of-module
+  - no-changed-when     # the rsync invocation reports changed unconditionally
+  - name[template]      # task names lead with the templated target, deliberately
+  - fqcn
+  - name
+  - var-naming
+  - key-order
+  - no-free-form
+  - yaml[line-length]
+
+exclude_paths:
+  - .ansible/

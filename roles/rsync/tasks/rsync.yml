@@ -17,7 +17,7 @@
       {% if rsync_owner or rsync_group %}
       --chown={{ rsync_owner | default('') }}:{{ rsync_group | default('') }}
       {% endif %}
-      -e "ssh -i {{ ssh_key_path }} 
+      -e "ssh -i {{ ssh_key_path }}
       {% if not ssh_strict_host_checking %}
       -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
       {% endif %}"

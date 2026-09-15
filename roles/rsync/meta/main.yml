@@ -14,7 +14,7 @@ galaxy_info:
   galaxy_tags:
     - rsync
     - ssh
-    - file-transfer
+    - filetransfer
     - storage
     - linux
 dependencies: []

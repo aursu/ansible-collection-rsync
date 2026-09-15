@@ -1,0 +1,63 @@
+---
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  unit:
+    name: unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ansible_collections/aursu/rsync
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install the test toolchain
+        run: pip install --disable-pip-version-check ansible-core pytest
+
+      - name: Unit tests
+        working-directory: ansible_collections/aursu/rsync
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: python -m pytest tests/ -q
+
+      - name: Every plugin compiles
+        working-directory: ansible_collections/aursu/rsync
+        run: python -m compileall -q plugins/
+
+  lint:
+    name: ansible-lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ansible_collections/aursu/rsync
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install ansible-lint
+        run: pip install --disable-pip-version-check ansible-lint
+
+      # syntax-check resolves module references against installed collections, so
+      # the collections the role calls have to be present or the report is
+      # dominated by modules that are simply absent.
+      - name: Install the collections the role calls
+        run: ansible-galaxy collection install community.crypto
+
+      # Blocking. .ansible-lint warn-lists the pre-existing stylistic rules;
+      # everything else fails the build, load-failure and syntax-check included.
+      - name: Lint the roles and playbooks
+        working-directory: ansible_collections/aursu/rsync
+        run: ansible-lint roles/ playbooks/

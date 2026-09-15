@@ -14,4 +14,18 @@ tags:
 repository: "https://github.com/aursu/ansible-collection-rsync.git"
 documentation: "https://github.com/aursu/ansible-collection-rsync/wiki"
 homepage: "https://github.com/aursu/ansible-collection-rsync"
-issues: "https://github.com/aursu/ansible-collection-rsync/issues" 
+issues: "https://github.com/aursu/ansible-collection-rsync/issues"
+
+# The collections the role actually calls. community.crypto was undeclared:
+# roles/rsync/tasks/ssh_keys.yml calls community.crypto.openssh_keypair, and
+# installing this collection from Galaxy pulled nothing, so the role had no
+# module to call.
+dependencies:
+  community.crypto: ">=2.0.0"
+  ansible.posix: ">=1.5.0"
+
+# Test and build residue, and CI configuration. None of it is collection content.
+build_ignore:
+  - .pytest_cache
+  - dist
+  - .github
